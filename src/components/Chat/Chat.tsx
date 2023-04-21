@@ -70,14 +70,14 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
             results,
             startSpeechToText,
             stopSpeechToText,
-            
-          } = useSpeechToText({
+
+        } = useSpeechToText({
             continuous: true,
             crossBrowser: true,
             googleApiKey: process.env.REACT_APP_API_KEY,
             speechRecognitionProperties: { interimResults: true },
             useLegacyResults: false
-          });
+        });
         const [showArrow, setShowArrow] = useState(false);
         const [scrollHappened, setScrollHappened] = useState(false);
         const [shouldLoadMoreMessages, setShouldLoadMoreMessages] = useState(false);
@@ -185,10 +185,10 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
         }, [children]);
 
         useEffect(() => {
-            const empty = !messageInput.trim();
-            setIsDisabled(empty);
-            if (empty) setMessageInput('');
-        }, [messageInput]);
+            setMessageInput((results as any).map((result) => (result.transcript)))
+        }, [results]);
+
+
 
         return (
             <Wrapper className={className}>
@@ -225,15 +225,24 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
                         )}
                     </WrapperAgentAnswer>
                     <WrapperFooter>
-                        <FooterInput
+{/*                         <FooterInput
                             ref={inputRef}
                             value={(results as ResultType[]).map((result) => (result.transcript))}
                             onChange={onInputChange}
                             onKeyPress={onInputKeyDown}
                             type="text"
                             placeholder={textPlaceholder[hookLanguage]}
+                        /> */}
+                        <FooterInput
+                            ref={inputRef}
+                            value={messageInput}
+                            onChange={onInputChange}
+                            onKeyPress={onInputKeyDown}
+                            type="text"
+                            placeholder={textPlaceholder[hookLanguage]}
                         />
-                        <FooterSend onClick={onButtonClick} type="submit" disabled={isDisabled}>
+                        {console.log(isDisabled)}
+                        <FooterSend onClick={onButtonClick} type="submit" >
                             <WrapperSendIcon>
                                 <SendIcon />
                             </WrapperSendIcon>
