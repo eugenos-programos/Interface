@@ -100,6 +100,17 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
 
         const onButtonClick = () => {
             throttleSendMessage(messageInput);
+            results.length = 0;
+        };
+
+        const onRecordButtonClick = () => {
+            if (isRecording) {
+                stopSpeechToText();
+                results.length = 0;
+            }
+            else {
+                startSpeechToText();
+            }
         };
 
         const scrollToLastMessage = () => mainRef.current?.lastElementChild?.scrollIntoView(false);
@@ -185,7 +196,7 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
         }, [children]);
 
         useEffect(() => {
-            setMessageInput((results as any).map((result) => (result.transcript)))
+            setMessageInput(messageInput + ' ' + (results.slice(-1) as any).map((result) => (String(result.transcript))))
         }, [results]);
 
 
@@ -225,14 +236,6 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
                         )}
                     </WrapperAgentAnswer>
                     <WrapperFooter>
-{/*                         <FooterInput
-                            ref={inputRef}
-                            value={(results as ResultType[]).map((result) => (result.transcript))}
-                            onChange={onInputChange}
-                            onKeyPress={onInputKeyDown}
-                            type="text"
-                            placeholder={textPlaceholder[hookLanguage]}
-                        /> */}
                         <FooterInput
                             ref={inputRef}
                             value={messageInput}
@@ -241,14 +244,14 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
                             type="text"
                             placeholder={textPlaceholder[hookLanguage]}
                         />
-                        {console.log(isDisabled)}
-                        <FooterSend onClick={onButtonClick} type="submit" >
+                        {console.log("Message - " + messageInput)}
+                        <FooterSend onClick={onButtonClick} type="submit">
                             <WrapperSendIcon>
                                 <SendIcon />
                             </WrapperSendIcon>
                         </FooterSend>
-                        {console.log(isRecording)}
-                        <FooterRecord onClick={isRecording ? stopSpeechToText : startSpeechToText} type="button">
+                        {console.log("Is recording - " + isRecording)}
+                        <FooterRecord onClick={onRecordButtonClick} type="button">
                             <WrapperRecordIcon>
                                 <RecordIcon />
                             </WrapperRecordIcon>

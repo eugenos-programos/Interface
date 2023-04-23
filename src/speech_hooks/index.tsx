@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import Hark from 'hark';
 import { startRecording, stopRecording } from './recorderHelpers';
-import { useSelector } from 'react-redux';
+import { ReactReduxContext, useSelector } from 'react-redux';
 
 // https://cloud.google.com/speech-to-text/docs/reference/rest/v1/RecognitionConfig
 import { GoogleCloudRecognitionConfig } from './GoogleCloudRecognitionConfig';
+import { resolveSoa } from 'dns';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition
 export interface SpeechRecognitionProperties {
@@ -191,20 +192,16 @@ export default function useSpeechToText({
   const startSpeechToText = async () => {
     console.log("Start recording")
     if (!useOnlyGoogleCloud && recognition) {
-      console.log(1)
       chromeSpeechRecognition();
       return;
     }
 
-    console.log(2)
 
 
     if (!crossBrowser && !useOnlyGoogleCloud) {
       return;
     }
       
-    console.log(6)
-
     // Resume audio context due to google auto play policy
     // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes#webaudio
     if (audioContextRef.current?.state === 'suspended') {
@@ -218,7 +215,6 @@ export default function useSpeechToText({
 
     setIsRecording(true);
 
-    console.log(11)
 
     // Stop recording if timeout
     if (timeout) {

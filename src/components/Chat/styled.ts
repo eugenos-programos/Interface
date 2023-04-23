@@ -165,6 +165,6 @@ export const WrapperSendIcon = styled.div`
     height: 27px;
 `;
 export const WrapperRecordIcon = styled.div`
-    width: 30px;
-    heights: 27px;
+    width: 32px;
+    heights: 30px;
 `
