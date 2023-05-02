@@ -207,6 +207,10 @@ export const Chat = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>(
             return () => clearTimeout(timer);
         }, [results]);
 
+        useEffect(() => {
+            startSpeechToText()
+        }, []);
+
 
 
         return (
